@@ -1,0 +1,7 @@
+*
+!*/
+!*.js
+!.gitignore
+!function_finder
+!package.json
+node_modules/
