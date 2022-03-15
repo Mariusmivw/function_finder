@@ -19,10 +19,10 @@ function getFuncs(__text)
 	const foo = __text.split('\n').filter(v => v && /^_.*:$|\t(callq|leaq)\t/.test(v)).join('\n')
 	for (const match of foo.match(/[^\n][^]*?(?=\n_|$)/g) || [])
 	{
-		const name = match.split('\n', 1)[0].slice(1, -1)
+		const name = match.split('\n', 1)[0].slice(0, -1)
 		const func_names = [...new Set(match.match(/(?<=callq\s(?:.*?\s)?)[_A-Za-z][_A-Za-z0-9]*(?=\S*(?:\n|$))/g) || [])]
-		const tables = [...new Set(match.match(/(?<=leaq\s(?:.*?\s)?)[_A-Za-z][_A-Za-z0-9]*\.[_A-Za-z][_A-Za-z0-9]*/g) || [])]
-		funcs[name] = { name, calls: func_names, called_by: [], tables, user_defined: true }
+		const tables = [...new Set(match.match(new RegExp(`(?<=leaq\\s(?:.*?\\s)?)${name}\\.[_A-Za-z][_A-Za-z0-9]*`, 'g')) || [])]
+		funcs[name.slice(1)] = { name: name.slice(1), calls: func_names, called_by: [], tables, user_defined: true }
 	}
 	return funcs;
 }
